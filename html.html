@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>クリックアップ</title>
+        <meta charset="UTF-8">
+        <style>
+        button {
+            font-size: 20px;
+            padding: 15px 30px;
+            margin: 5px;
+        }
+
+        </style>
+    </head>
+    <body>
+        <h1 id="text">0</h1>
+        <button id="btn">+1</button>
+        <h2>cp</h2>
+        <ul style="list-style: none;">
+            <li id="up">0</li>
+        </ul>
+        <h2>op</h2>
+        <ul style="list-style: none;">
+            <li id="auto">0</li>
+        </ul>
+        <h2>cup1:cp+1</h2>
+        <button id="upgrade1">0</button>
+        <h2>cup2:cup1の効果+1倍</h2>
+        <button id="upgrade2">0</button>
+        <h2>cup3:指数+0.01</h2>
+        <button id="upgrade3">0</button>
+        <h2>oup1:自動ゲット+1</h2>
+        <button id="upgrade4">0</button>
+        <h2>oup2:自動ゲット間隔短縮</h2>
+        <button id="upgrade5">0</button>
+        <h2>oup3:oupの効果+1倍</h2>
+        <button id="upgrade6">0</button>
+        <h2 id="outo">0</h2>
+        <br>
+        <h2>用語紹介</h2>
+        <ui>
+            <li>cp=クリック力</li>
+            <li>cup=クリックアップグレード</li>
+            <li>op=オート力</li>
+            <li>oup=オートアップグレード</li>
+        </ui>
+        <script>
+            //変数定義
+            let score=0;
+            let nedan=[
+                10,100,1000,100,1000,1000
+            ];
+            //購入数
+            let kounyu1=[
+                1,1,1
+            ];
+            let kounyu2=[
+                1,1,1
+            ];
+            let kounyu3=[
+                1,1
+            ]
+            //スコアアップ
+            let scoreup=0;
+            let scoreupz=0;
+            //スコープ用
+            let scope=0;
+            //オートの時間
+            let outup=10000;
+            //指数表記用
+            let e=0;
+            //upの成長率
+            let upp=1.1;
+
+            //scoreが増える
+            function scoreups () {
+                scoreup=kounyu1[0]*kounyu1[1]**kounyu1[2];
+            };
+
+            //オート時間
+            function startAuto() {
+                setInterval(() => {
+                    scoreupz=kounyu2[0]*kounyu2[2];
+                    es((score+=scoreupz));
+                    up();
+                }, outup);
+            };
+            startAuto();
+
+            //指数表記へ変更
+            function es(ea) {
+                e=ea.toString().length;
+                if(e<21&&e>6){
+                    scope=ea.toString().substring(0, 3)+"e"+(e-1);
+                };
+            };
+
+            //html変更
+            function up () {
+                scoreups();
+                scope=kounyu1[0]+"*"+kounyu1[1]+"^"+cut(kounyu1[2]);
+                es(scope);
+                document.getElementById("up").innerText =kounyu1[0]+"*"+kounyu1[1]+"^"+cut(kounyu1[2]);
+                document.getElementById("auto").innerText =kounyu2[0]+"/"+outup+"ms";
+                es(score);
+                document.getElementById("btn").innerText = "+"+cut(scoreup)+"score";
+                scope=0;
+                document.getElementById("text").innerText = cut(score)+"score";
+                document.getElementById("outo").innerText = "残り"+(101-kounyu2[1])+"回購入可能";
+                
+                //効果表示用
+                for (let is=0;is<4;is++){
+                    for (let i=0;i<"kounyu"+(is+1).length;i++){
+                        document.getElementById("upgrade"+(i+1+(is*scope))).innerText = cut(nedan[i+is*scope])+"score";
+                        scope=i+1;
+                    };
+                };
+                scope=0;
+            };
+            up();
+
+            //小数点排除
+            function cut(x) {
+                return Math.floor(x * 100) / 100;
+            };
+
+            //scoreアップ
+            document.getElementById("btn").onclick = function () {
+                score+=scoreup;
+                up();
+            };
+
+            //アップグレード
+            document.getElementById("upgrade1").onclick = function () {
+                if (score>=nedan[0]){
+                    score-=nedan[0];
+                    nedan[0]*=upp;
+                    kounyu1[0]+=1;
+                };
+                up();
+            };
+            document.getElementById("upgrade2").onclick = function () {
+                if (score>=nedan[1]){
+                    score-=nedan[1];
+                    nedan[1]*=upp;
+                    kounyu1[1]+=1;
+                }
+                up();
+            };
+            document.getElementById("upgrade3").onclick = function () {
+                if (score>=nedan[2]){
+                    score-=nedan[2];
+                    nedan[2]*=upp;
+                    kounyu1[2]+=0.01;
+                }
+                up();
+            };
+            document.getElementById("upgrade4").onclick = function () {
+                if (score>=nedan[3]){
+                    score-=nedan[3];
+                    nedan[3]*=upp;
+                    kounyu2[0]+=1;
+                }
+                up();
+            };
+            document.getElementById("upgrade5").onclick = function () {
+                if (score>=nedan[4]&&kounyu2[1]<101){
+                    score-=nedan[4];
+                    nedan[4]*=upp;
+                    kounyu2[1]+=1;
+                    outup-=outup/kounyu2[1]
+                }
+                up();
+            };
+            document.getElementById("upgrade6").onclick = function () {
+                if (score>=nedan[5]){
+                    score-=nedan[5];
+                    nedan[5]*=upp;
+                    kounyu2[2]+=-1;
+                }
+                up();
+            };
+        </script>
+    </body>
+</html>
