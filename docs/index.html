@@ -109,12 +109,15 @@
                 document.getElementById("outo").innerText = "残り"+(101-kounyu2[1])+"回購入可能";
                 
                 //効果表示用
-                for (let is=0;is<4;is++){
-                    for (let i=0;i<"kounyu"+(is+1).length;i++){
-                        document.getElementById("upgrade"+(i+1+(is*scope))).innerText = cut(nedan[i+is*scope])+"score";
-                        scope=i+1;
-                    };
-                };
+                for (let is = 1; is <= 4; is++) {
+                        const arr = window["kounyu" + is];
+                        for (let i = 0; i < arr.length; i++) {
+                            const idx = i + scope;
+                            document.getElementById("upgrade" + (idx + 1)).innerText =
+                            cut(nedan[idx]) + "score";
+                        }
+                        scope += arr.length;
+                }
                 scope=0;
             };
             up();
