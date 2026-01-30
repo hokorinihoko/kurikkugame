@@ -9,6 +9,9 @@
             padding: 15px 30px;
             margin: 5px;
         }
+        outo {
+            font-size: 15px;
+        }
 
         </style>
     </head>
@@ -27,15 +30,20 @@
         <button id="upgrade1">0</button>
         <h2>cup2:cup1の効果+1倍</h2>
         <button id="upgrade2">0</button>
-        <h2>cup3:指数+0.01</h2>
+        <h2>cup3:cpの指数+0.01</h2>
         <button id="upgrade3">0</button>
         <h2>oup1:自動ゲット+1</h2>
         <button id="upgrade4">0</button>
         <h2>oup2:自動ゲット間隔短縮</h2>
         <button id="upgrade5">0</button>
-        <h2>oup3:oupの効果+1倍</h2>
-        <button id="upgrade6">0</button>
-        <h2 id="outo">0</h2>
+        <h2>oup3:oup1の効果+1倍</h2>
+        <button>
+            <span id="upgrade6">0</span>
+            <br>
+            <outo id="outo">0</outo>
+        </button>
+        <h2>oup4:opの指数+0.01</h2>
+        <button id="upgrade7">0</button>
         <br>
         <h2>用語紹介</h2>
         <ui>
@@ -45,21 +53,22 @@
             <li>oup=オートアップグレード</li>
         </ui>
         <script>
+            //セットアップ
+
             //変数定義
             let score=0;
             let nedan=[
-                10,100,1000,100,1000,1000
+                10,100,1000,100,1000,1000,1000
             ];
             //購入数
-            let kounyu1=[
-                1,1,1
+            let kounyu=[
+                1,1,1,1,1,1,1,1
             ];
-            let kounyu2=[
-                1,1,1
-            ];
-            let kounyu3=[
-                1,1
-            ]
+            //単位
+            //let unit=[
+            //    "","K","M","B","T","A"
+            //]
+
             //スコアアップ
             let scoreup=0;
             let scoreupz=0;
@@ -72,60 +81,70 @@
             //upの成長率
             let upp=1.1;
 
+            //関数作成
+
             //scoreが増える
             function scoreups () {
-                scoreup=kounyu1[0]*kounyu1[1]**kounyu1[2];
+                scoreup=kounyu[0]*kounyu[1]**kounyu[2];
             };
 
             //オート時間
             function startAuto() {
                 setInterval(() => {
-                    scoreupz=kounyu2[0]*kounyu2[2];
+                    scoreupz=kounyu[3]*kounyu[5];
                     es((score+=scoreupz));
                     up();
                 }, outup);
             };
             startAuto();
 
-            //指数表記へ変更
+            // 指数表記へ変更
             function es(ea) {
-                e=ea.toString().length;
-                if(e<21&&e>6){
-                    scope=ea.toString().substring(0, 3)+"e"+(e-1);
-                };
+                let s = ea.toString();
+                let len = s.length;
+                if (len > 6&&score<9.99e20) {
+                    return s.substring(0, 1) + "." + s.substring(1, 3) + "e" + (len - 1);
+                } else {
+                    return ea;
+                }
             };
-
-            //html変更
-            function up () {
-                scoreups();
-                scope=kounyu1[0]+"*"+kounyu1[1]+"^"+cut(kounyu1[2]);
-                es(scope);
-                document.getElementById("up").innerText =kounyu1[0]+"*"+kounyu1[1]+"^"+cut(kounyu1[2]);
-                document.getElementById("auto").innerText =kounyu2[0]+"/"+outup+"ms";
-                es(score);
-                document.getElementById("btn").innerText = "+"+cut(scoreup)+"score";
-                scope=0;
-                document.getElementById("text").innerText = cut(score)+"score";
-                document.getElementById("outo").innerText = "残り"+(101-kounyu2[1])+"回購入可能";
-                
-                //効果表示用
-                for (let is=1;is<=3;is++){
-                        const arr=window["kounyu"+is];
-                        for (let i=0;i<arr.length;i++){
-                            const idx=i+scope;
-                            document.getElementById("upgrade"+(idx+1)).innerText=
-                            cut(nedan[idx])+"score";
-                        };
-                        scope+=arr.length;
-                };
-                scope=0;
-            };
-            up();
+            //function units(unitz){
+            //    for(let i=0;i<unit.length;i++){
+            //        if (score>=1000**i){
+            //            return unit[i]
+            //        }
+            //    }
+            //}
 
             //小数点排除
             function cut(x) {
                 return Math.floor(x * 100) / 100;
             };
+
+            //html変更
+            function up () {
+                scoreups();
+                scope=kounyu[0]+"*"+kounyu[1]+"^"+cut(kounyu[2]);
+                es(scope);
+                document.getElementById("up").innerText =scope
+                document.getElementById("auto").innerText =kounyu[3]+"/"+outup+"ms";
+                es(score);
+                document.getElementById("btn").innerText = "+"+cut(scoreup)+"score";
+                scope=0
+                document.getElementById("text").innerText = cut(es(score))+"score";
+                document.getElementById("outo").innerText = "残り"+(101-kounyu[4])+"回購入可能";
+              
+                //動き
+
+                //効果表示用
+                try {
+                    for(let i=0;i<kounyu.length;i++){
+                        document.getElementById("upgrade"+(i+1)).innerText=
+                        cut(nedan[i])+"score";
+                    }
+                } catch  {}
+            }
+            up()
 
             //scoreアップ
             document.getElementById("btn").onclick = function () {
@@ -138,7 +157,7 @@
                 if (score>=nedan[0]){
                     score-=nedan[0];
                     nedan[0]*=upp;
-                    kounyu1[0]+=1;
+                    kounyu[0]+=1;
                 };
                 up();
             };
@@ -146,7 +165,7 @@
                 if (score>=nedan[1]){
                     score-=nedan[1];
                     nedan[1]*=upp;
-                    kounyu1[1]+=1;
+                    kounyu[1]+=1;
                 }
                 up();
             };
@@ -154,7 +173,7 @@
                 if (score>=nedan[2]){
                     score-=nedan[2];
                     nedan[2]*=upp;
-                    kounyu1[2]+=0.01;
+                    kounyu[2]+=0.01;
                 }
                 up();
             };
@@ -162,16 +181,16 @@
                 if (score>=nedan[3]){
                     score-=nedan[3];
                     nedan[3]*=upp;
-                    kounyu2[0]+=1;
+                    kounyu[3]+=1;
                 }
                 up();
             };
             document.getElementById("upgrade5").onclick = function () {
-                if (score>=nedan[4]&&kounyu2[1]<101){
+                if (score>=nedan[4]&&kounyu[4]<101){
                     score-=nedan[4];
                     nedan[4]*=upp;
-                    kounyu2[1]+=1;
-                    outup-=outup/kounyu2[1]
+                    kounyu[4]+=1;
+                    outup-=outup/kounyu[4]
                 }
                 up();
             };
@@ -179,11 +198,18 @@
                 if (score>=nedan[5]){
                     score-=nedan[5];
                     nedan[5]*=upp;
-                    kounyu2[2]+=-1;
+                    kounyu[5]+=1;
+                }
+                up();
+            };
+            document.getElementById("upgrade7").onclick = function () {
+                if (score>=nedan[6]){
+                    score-=nedan[6];
+                    nedan[6]*=upp;
+                    kounyu[6]+=0.01;
                 }
                 up();
             };
         </script>
     </body>
 </html>
-
