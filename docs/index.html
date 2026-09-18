@@ -144,17 +144,17 @@
 
             <div class="achievement" onclick="showAchievement(1)">
                 No.001<br>
-                はじめの一歩
+                ？？？
             </div>
 
             <div class="achievement" onclick="showAchievement(2)">
                 No.002<br>
-                100点
+                ？？？
             </div>
 
             <div class="achievement" onclick="showAchievement(3)">
                 No.003<br>
-                大金持ち
+                ？？？
             </div>
 
             <div id="achievementDetail" class="achievementDetail"></div>
@@ -440,20 +440,158 @@
                 }
             };
             //実績
-            function showAchievement(number){
-                let detail = document.getElementById("achievementDetail");
-
-                if(number === 1){
-                    detail.innerText = "初めてクリックする";
-                }
-
-                if(number === 2){
-                    detail.innerText = "scoreを100以上にする";
-                }
-
-                if(number === 3){
-                    detail.innerText = "scoreを1,000,000以上にする";
-                }
+            let achievements = [
+                {
+                    id: 1,
+                    name: "はじめの一歩",
+                    condition: "scoreを1以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 2,
+                    name: "アップグレード可能",
+                    condition: "scoreを10以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 3,
+                    name: "序章",
+                    condition: "scoreを100以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 4,
+                    name: "桁代わり",
+                    condition: "scoreを1K以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 5,
+                    name: "1万!",
+                    condition: "scoreを10K以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 6,
+                    name: "Kはケルビンとも読むらしい",
+                    condition: "scoreを100K以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 7,
+                    name: "まだ見慣れた桁",
+                    condition: "scoreを1M以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 8,
+                    name: "インフレの予感",
+                    condition: "scoreを10M以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 9,
+                    name: "1億!!",
+                    condition: "scoreを100M以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 10,
+                    name: "次の桁の文字は？",
+                    condition: "scoreを1B以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 11,
+                    name: "Bはビリオン",
+                    condition: "scoreを10B以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 12,
+                    name: "元素ならベリリウム",
+                    condition: "scoreを100B以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 13,
+                    name: "正解はTでした",
+                    condition: "scoreを1T以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 14,
+                    name: "見逃された1兆",
+                    condition: "scoreを10T以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 15,
+                    name: "トリリオンってポ〇モンにいた気も？",
+                    condition: "scoreを100T以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 16,
+                    name: "次の桁は何でしょうか",
+                    condition: "scoreを1a以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 17,
+                    name: "京に到達",
+                    condition: "scoreを10a以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 18,
+                    name: "これの読み方アクセリオンだと思ってた",
+                    condition: "scoreを100a以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 19,
+                    name: "指数に到達",
+                    condition: "scoreを1e20以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 20,
+                    name: "実績もインフレ",
+                    condition: "scoreを1e25以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 21,
+                    name: "さすがに5桁あげはきつい",
+                    condition: "scoreを1e30以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 22,
+                    name: "35ってなぜか好きな数字",
+                    condition: "scoreを1e35以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 23,
+                    name: "いうこともなくなってきた",
+                    condition: "scoreを1e45以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 24,
+                    name: "切りのいい数字",
+                    condition: "scoreを1e50以上にする",
+                    unlocked: false
+                },
+                {
+                    id: 25,
+                    name: "ニコニコの25",
+                    condition: "scoreを1e55以上にする",
+                    unlocked: false
+                },
+            ];
 
                 detail.style.display = "block";
             }
