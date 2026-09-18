@@ -66,6 +66,10 @@
             padding: 5px;
             border: 2px solid black;
         }
+
+        .achievementName {
+            font-size: 14px;
+        }
         </style>
     </head>
     <body>
@@ -666,6 +670,7 @@
                     achievement.className = "achievement";
                     achievement.innerHTML = `
                         <div>No.${String(achievements[i].id).padStart(3,"0")}</div>
+                        <div class="achievementName">${achievements[i].unlocked ? achievements[i].name : "???"}</div>
                         <div>${achievements[i].unlocked ? achievements[i].name : "???"}</div>
                     `;
                     achievement.onclick = function(){
