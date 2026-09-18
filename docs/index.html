@@ -179,329 +179,7 @@
             let outup=10000;
             //upの成長率
             let upp=1.1;
-
-            //関数作成
-
-            //S&L
-            function load(){
-                let data=localStorage.getItem("score");
-                if(data!==null){
-                    score=Number(data);
-                    nedan=JSON.parse(localStorage.getItem("nedan"));
-                    kounyu=JSON.parse(localStorage.getItem("kounyu"));
-                    effect=JSON.parse(localStorage.getItem("effect"));
-                    outup=Number(localStorage.getItem("outup"));
-                };
-            };
-            load();
-            function save(){
-                localStorage.setItem("score",score);
-                localStorage.setItem("nedan",JSON.stringify(nedan));
-                localStorage.setItem("kounyu",JSON.stringify(kounyu));
-                localStorage.setItem("effect",JSON.stringify(effect));
-                localStorage.setItem("outup",outup);
-            };
-
-            // 保存コード作成
-            function makeSaveCode(){
-                let data={
-                    score:score,
-                    nedan:nedan,
-                    kounyu:kounyu,
-                    effect:effect,
-                    outup:outup
-                };
-
-                // JSON → Base64
-                let json=JSON.stringify(data);
-                let code=btoa(unescape(encodeURIComponent(json)));
-
-                return "CU1-"+code;
-            };
-
-            // 保存コード読み込み
-            function loadCode(code){
-                try{
-                    if(!code.startsWith("CU1-")){
-                        throw new Error("形式が違います");
-                    };
-
-                    let base64=code.substring(4);
-                    let json=decodeURIComponent(escape(atob(base64)));
-                    let data=JSON.parse(json);
-
-                    if(
-                        typeof data.score!=="number" ||
-                        !Array.isArray(data.nedan) ||
-                        !Array.isArray(data.kounyu) ||
-                        !Array.isArray(data.effect) ||
-                        typeof data.outup!=="number"
-                    ){
-                        throw new Error("データが不正です");
-                    };
-
-                    score=data.score;
-                    nedan=data.nedan;
-                    kounyu=data.kounyu;
-                    effect=data.effect;
-                    outup=data.outup;
-
-                    up();
-                    return true;
-                }catch(error){
-                    console.log(error);
-                    return false;
-                };
-            };
-
-            setInterval(save,60000);
-            //メニュー
-            document.getElementById("menuBtn").onclick=function(){
-                document.getElementById("menu").classList.toggle("open");
-            };
-            document.getElementById("game").onclick=function(){
-                document.getElementById("gameScreen").style.display="block";
-                document.getElementById("systemScreen").style.display="none";
-                document.getElementById("achievementScreen").style.display="none";
-            };
-
-            document.getElementById("system").onclick=function(){
-                document.getElementById("gameScreen").style.display="none";
-                document.getElementById("systemScreen").style.display="block";
-                document.getElementById("achievementScreen").style.display="none";
-            };
-
-            document.getElementById("achievement").onclick=function(){
-                document.getElementById("gameScreen").style.display="none";
-                document.getElementById("systemScreen").style.display="none";
-                document.getElementById("achievementScreen").style.display="block";
-            };
-            //scoreが増える
-            function scoreups(){
-                scoreup=(effect[0]*effect[1])**effect[2];
-            };
-            //オート時間
-            function startAuto(){
-                setTimeout(()=>{
-                    scoreupz=(effect[3]*effect[5])**effect[6];
-                    score+=scoreupz;
-                    up();
-                    startAuto();
-                },outup);
-            };
-            startAuto();
-            //指数表記へ
-            function e(x){
-                if (x>=1e5){
-                    return x.toExponential(2);
-                }else{
-                    return cut(x);
-                };
-            };
-            //小数点排除
-            function cut(xx){
-                return Math.floor(xx*100)/100;
-            };
-            //html変更
-            function up(){
-                scoreups();
-                document.getElementById("up").innerText="("+e(effect[0])+"*"+e(effect[1])+")^"+e(effect[2]);
-                document.getElementById("auto").innerText="("+e(effect[3])+"*"+e(effect[5])+")^"+e(effect[6])+"/"+outup+"ms";
-                document.getElementById("btn").innerText="+"+e(scoreup)+"score";
-                document.getElementById("text").innerText=e(score)+"score";
-                document.getElementById("outo").innerText="残り"+(100-kounyu[4])+"回購入可能";
-                //効果表示用
-                try{
-                    for(let i=0;i<7;i++){
-                        document.getElementById("upgrade"+(i+1)+"price").innerText=
-                        e(nedan[i])+"score";
-                        document.getElementById("kounyu"+(i+1)).innerText=
-                        kounyu[i];
-                    }
-                }catch(error){
-                    console.log(error);
-                };
-                checkAchievements();
-            };
-            //scoreアップ
-            document.getElementById("btn").onclick=function(){
-                score+=scoreup;
-                up();
-            };
-            //アップグレード
-            document.getElementById("upgrade1").onclick=function(){
-                if (score>=nedan[0]){
-                    score-=nedan[0];
-                    nedan[0]*=upp;
-                    kounyu[0]+=1;
-                    effect[0]+=1;
-                };
-                up();
-            };
-            document.getElementById("upgrade2").onclick=function(){
-                if (score>=nedan[1]){
-                    score-=nedan[1];
-                    nedan[1]*=upp;
-                    kounyu[1]+=1;
-                    effect[1]+=1;
-                };
-                up();
-            };
-            document.getElementById("upgrade3").onclick=function(){
-                if (score>=nedan[2]){
-                    score-=nedan[2];
-                    nedan[2]*=upp;
-                    if(kounyu[2]<100){
-                        kounyu[2]+=1;
-                        effect[2]+=0.01;
-                    }else{
-                        kounyu[2]+=1;
-                        effect[2]+=0.005;
-                    };
-                };
-                up();
-            };
-            document.getElementById("upgrade4").onclick=function(){
-                if (score>=nedan[3]){
-                    score-=nedan[3];
-                    nedan[3]*=upp;
-                    kounyu[3]+=1;
-                    effect[3]+=1;
-                };
-                up();
-            };
-            document.getElementById("upgrade5").onclick=function(){
-                if (score>=nedan[4]&&kounyu[4]<100){
-                    score-=nedan[4];
-                    nedan[4]*=upp;
-                    kounyu[4]+=1;
-                    effect[4]+=1;
-                    outup-=Math.floor(outup/effect[4]);
-                };
-                up();
-            };
-            document.getElementById("upgrade6").onclick=function(){
-                if (score>=nedan[5]){
-                    score-=nedan[5];
-                    nedan[5]*=upp;
-                    kounyu[5]+=1;
-                    effect[5]+=1;
-                };
-                up();
-            };
-            document.getElementById("upgrade7").onclick=function(){
-                if (score>=nedan[6]){
-                    score-=nedan[6];
-                    nedan[6]*=upp;
-                    kounyu[6]+=1;
-                    effect[6]+=0.01;
-                };
-                up();
-            };
-            //セーブ
-            document.getElementById("save").onclick=function(){
-                save();
-            };
-            //保存コード書き出し＆読み込み
-            document.getElementById("codesave").onclick=function(){
-                let code=makeSaveCode();
-                document.getElementById("saveCode").value=code;
-                document.getElementById("codeMessage").innerText="保存コードを作成しました";
-            };
-
-            document.getElementById("copyCode").onclick=function(){
-                let code=document.getElementById("saveCode").value;
-
-                if(code===""){
-                    document.getElementById("codeMessage").innerText="先にcodesaveを押してください";
-                    return;
-                };
-
-                navigator.clipboard.writeText(code);
-                document.getElementById("codeMessage").innerText="コピーしました";
-            };
-
-            document.getElementById("load").onclick=function(){
-                let code=document.getElementById("loadCode").value.trim();
-
-                if(loadCode(code)){
-                    save();
-                    document.getElementById("codeMessage").innerText="読み込みました";
-                }else{
-                    document.getElementById("codeMessage").innerText="保存コードが正しくありません";
-                };
-            };
-            document.getElementById("reset").onclick=function(){
-                if(confirm("本当にゲームデータをリセットしますか？")){
-                    localStorage.clear();
-                    location.reload();
-                };
-            };
             //実績
-            function createAchievements(){
-                let list = document.getElementById("achievementList");
-                list.innerHTML = "";
-                for(let i=0; i<achievements.length; i++){
-                    let achievement = document.createElement("div");
-                    achievement.className = "achievement";
-                    achievement.innerHTML = `
-                        <div>No.${String(achievements[i].id).padStart(3,"0")}</div>
-                        <div>${achievements[i].unlocked ? achievements[i].name : "???"}</div>
-                    `;
-                    achievement.onclick = function(){
-                    showAchievement(achievements[i].id);
-                    };
-                    list.appendChild(achievement);
-                };
-            };
-            function showAchievement(id){
-                let detail = document.getElementById("achievementDetail");
-                let achievement = achievements.find(a => a.id === id);
-                if(achievement === undefined){
-                    return;
-                };
-                if(achievement.unlocked){
-                    detail.innerHTML = `
-                        <h2>No.${String(achievement.id).padStart(3,"0")} ${achievement.name}</h2>
-                        <p>${achievement.condition}</p>
-                    `;
-                }else{
-                    detail.innerHTML = `
-                        <h2>???</h2>
-                        <p>???</p>
-                    `;
-                };
-                detail.style.display = "block";
-            };
-            function checkAchievements(){
-                let changed=false;
-                for(let i=0;i<achievements.length;i++){
-                    let achievement=achievements[i];
-                    if(achievement.unlocked){
-                        continue;
-                    }
-                    let value=0;
-                    // 実績の種類によって判定する値を変える
-                    if(achievement.type==="score"){
-                        value=score;
-                    }
-                    else if(achievement.type==="cps"){
-                        value=scoreup;
-                    }
-                    else{
-                        continue;
-                    }
-                    if(value>=achievement.target){
-                        achievement.unlocked=true;
-                        changed=true;
-                        console.log("実績解除: "+achievement.name);
-                    }
-                }
-                if(changed){
-                    createAchievements();
-                    save();
-                }
-            }
             let achievements = [
                 {
                     type: "score",
@@ -720,8 +398,331 @@
                     unlocked: false
                 },
             ];
+
+            //関数作成
+
+            //S&L
+            function load(){
+                let data=localStorage.getItem("score");
+                if(data!==null){
+                    score=Number(data);
+                    nedan=JSON.parse(localStorage.getItem("nedan"));
+                    kounyu=JSON.parse(localStorage.getItem("kounyu"));
+                    effect=JSON.parse(localStorage.getItem("effect"));
+                    outup=Number(localStorage.getItem("outup"));
+                };
+            };
+            load();
+            function save(){
+                localStorage.setItem("score",score);
+                localStorage.setItem("nedan",JSON.stringify(nedan));
+                localStorage.setItem("kounyu",JSON.stringify(kounyu));
+                localStorage.setItem("effect",JSON.stringify(effect));
+                localStorage.setItem("outup",outup);
+            };
+
+            // 保存コード作成
+            function makeSaveCode(){
+                let data={
+                    score:score,
+                    nedan:nedan,
+                    kounyu:kounyu,
+                    effect:effect,
+                    outup:outup
+                };
+
+                // JSON → Base64
+                let json=JSON.stringify(data);
+                let code=btoa(unescape(encodeURIComponent(json)));
+
+                return "CU1-"+code;
+            };
+
+            // 保存コード読み込み
+            function loadCode(code){
+                try{
+                    if(!code.startsWith("CU1-")){
+                        throw new Error("形式が違います");
+                    };
+
+                    let base64=code.substring(4);
+                    let json=decodeURIComponent(escape(atob(base64)));
+                    let data=JSON.parse(json);
+
+                    if(
+                        typeof data.score!=="number" ||
+                        !Array.isArray(data.nedan) ||
+                        !Array.isArray(data.kounyu) ||
+                        !Array.isArray(data.effect) ||
+                        typeof data.outup!=="number"
+                    ){
+                        throw new Error("データが不正です");
+                    };
+
+                    score=data.score;
+                    nedan=data.nedan;
+                    kounyu=data.kounyu;
+                    effect=data.effect;
+                    outup=data.outup;
+
+                    up();
+                    return true;
+                }catch(error){
+                    console.log(error);
+                    return false;
+                };
+            };
+
+            setInterval(save,60000);
+            //メニュー
+            document.getElementById("menuBtn").onclick=function(){
+                document.getElementById("menu").classList.toggle("open");
+            };
+            document.getElementById("game").onclick=function(){
+                document.getElementById("gameScreen").style.display="block";
+                document.getElementById("systemScreen").style.display="none";
+                document.getElementById("achievementScreen").style.display="none";
+            };
+
+            document.getElementById("system").onclick=function(){
+                document.getElementById("gameScreen").style.display="none";
+                document.getElementById("systemScreen").style.display="block";
+                document.getElementById("achievementScreen").style.display="none";
+            };
+
+            document.getElementById("achievement").onclick=function(){
+                document.getElementById("gameScreen").style.display="none";
+                document.getElementById("systemScreen").style.display="none";
+                document.getElementById("achievementScreen").style.display="block";
+            };
+            //scoreが増える
+            function scoreups(){
+                scoreup=(effect[0]*effect[1])**effect[2];
+            };
+            //オート時間
+            function startAuto(){
+                setTimeout(()=>{
+                    scoreupz=(effect[3]*effect[5])**effect[6];
+                    score+=scoreupz;
+                    up();
+                    startAuto();
+                },outup);
+            };
+            startAuto();
+            //指数表記へ
+            function e(x){
+                if (x>=1e5){
+                    return x.toExponential(2);
+                }else{
+                    return cut(x);
+                };
+            };
+            //小数点排除
+            function cut(xx){
+                return Math.floor(xx*100)/100;
+            };
+            //html変更
+            function up(){
+                scoreups();
+                document.getElementById("up").innerText="("+e(effect[0])+"*"+e(effect[1])+")^"+e(effect[2]);
+                document.getElementById("auto").innerText="("+e(effect[3])+"*"+e(effect[5])+")^"+e(effect[6])+"/"+outup+"ms";
+                document.getElementById("btn").innerText="+"+e(scoreup)+"score";
+                document.getElementById("text").innerText=e(score)+"score";
+                document.getElementById("outo").innerText="残り"+(100-kounyu[4])+"回購入可能";
+                //効果表示用
+                try{
+                    for(let i=0;i<7;i++){
+                        document.getElementById("upgrade"+(i+1)+"price").innerText=
+                        e(nedan[i])+"score";
+                        document.getElementById("kounyu"+(i+1)).innerText=
+                        kounyu[i];
+                    }
+                }catch(error){
+                    console.log(error);
+                };
+                checkAchievements();
+            };
+            up();
+            //scoreアップ
+            document.getElementById("btn").onclick=function(){
+                score+=scoreup;
+                up();
+            };
+            //アップグレード
+            document.getElementById("upgrade1").onclick=function(){
+                if (score>=nedan[0]){
+                    score-=nedan[0];
+                    nedan[0]*=upp;
+                    kounyu[0]+=1;
+                    effect[0]+=1;
+                };
+                up();
+            };
+            document.getElementById("upgrade2").onclick=function(){
+                if (score>=nedan[1]){
+                    score-=nedan[1];
+                    nedan[1]*=upp;
+                    kounyu[1]+=1;
+                    effect[1]+=1;
+                };
+                up();
+            };
+            document.getElementById("upgrade3").onclick=function(){
+                if (score>=nedan[2]){
+                    score-=nedan[2];
+                    nedan[2]*=upp;
+                    if(kounyu[2]<100){
+                        kounyu[2]+=1;
+                        effect[2]+=0.01;
+                    }else{
+                        kounyu[2]+=1;
+                        effect[2]+=0.005;
+                    };
+                };
+                up();
+            };
+            document.getElementById("upgrade4").onclick=function(){
+                if (score>=nedan[3]){
+                    score-=nedan[3];
+                    nedan[3]*=upp;
+                    kounyu[3]+=1;
+                    effect[3]+=1;
+                };
+                up();
+            };
+            document.getElementById("upgrade5").onclick=function(){
+                if (score>=nedan[4]&&kounyu[4]<100){
+                    score-=nedan[4];
+                    nedan[4]*=upp;
+                    kounyu[4]+=1;
+                    effect[4]+=1;
+                    outup-=Math.floor(outup/effect[4]);
+                };
+                up();
+            };
+            document.getElementById("upgrade6").onclick=function(){
+                if (score>=nedan[5]){
+                    score-=nedan[5];
+                    nedan[5]*=upp;
+                    kounyu[5]+=1;
+                    effect[5]+=1;
+                };
+                up();
+            };
+            document.getElementById("upgrade7").onclick=function(){
+                if (score>=nedan[6]){
+                    score-=nedan[6];
+                    nedan[6]*=upp;
+                    kounyu[6]+=1;
+                    effect[6]+=0.01;
+                };
+                up();
+            };
+            //セーブ
+            document.getElementById("save").onclick=function(){
+                save();
+            };
+            //保存コード書き出し＆読み込み
+            document.getElementById("codesave").onclick=function(){
+                let code=makeSaveCode();
+                document.getElementById("saveCode").value=code;
+                document.getElementById("codeMessage").innerText="保存コードを作成しました";
+            };
+
+            document.getElementById("copyCode").onclick=function(){
+                let code=document.getElementById("saveCode").value;
+
+                if(code===""){
+                    document.getElementById("codeMessage").innerText="先にcodesaveを押してください";
+                    return;
+                };
+
+                navigator.clipboard.writeText(code);
+                document.getElementById("codeMessage").innerText="コピーしました";
+            };
+
+            document.getElementById("load").onclick=function(){
+                let code=document.getElementById("loadCode").value.trim();
+
+                if(loadCode(code)){
+                    save();
+                    document.getElementById("codeMessage").innerText="読み込みました";
+                }else{
+                    document.getElementById("codeMessage").innerText="保存コードが正しくありません";
+                };
+            };
+            document.getElementById("reset").onclick=function(){
+                if(confirm("本当にゲームデータをリセットしますか？")){
+                    localStorage.clear();
+                    location.reload();
+                };
+            };
+            //実績
+            function createAchievements(){
+                let list = document.getElementById("achievementList");
+                list.innerHTML = "";
+                for(let i=0; i<achievements.length; i++){
+                    let achievement = document.createElement("div");
+                    achievement.className = "achievement";
+                    achievement.innerHTML = `
+                        <div>No.${String(achievements[i].id).padStart(3,"0")}</div>
+                        <div>${achievements[i].unlocked ? achievements[i].name : "???"}</div>
+                    `;
+                    achievement.onclick = function(){
+                    showAchievement(achievements[i].id);
+                    };
+                    list.appendChild(achievement);
+                };
+            };
+            function showAchievement(id){
+                let detail = document.getElementById("achievementDetail");
+                let achievement = achievements.find(a => a.id === id);
+                if(achievement === undefined){
+                    return;
+                };
+                if(achievement.unlocked){
+                    detail.innerHTML = `
+                        <h2>No.${String(achievement.id).padStart(3,"0")} ${achievement.name}</h2>
+                        <p>${achievement.condition}</p>
+                    `;
+                }else{
+                    detail.innerHTML = `
+                        <h2>???</h2>
+                        <p>???</p>
+                    `;
+                };
+                detail.style.display = "block";
+            };
+            function checkAchievements(){
+                let changed=false;
+                for(let i=0;i<achievements.length;i++){
+                    let achievement=achievements[i];
+                    if(achievement.unlocked){
+                        continue;
+                    }
+                    let value=0;
+                    // 実績の種類によって判定する値を変える
+                    if(achievement.type==="score"){
+                        value=score;
+                    }
+                    else if(achievement.type==="cps"){
+                        value=scoreup;
+                    }
+                    else{
+                        continue;
+                    }
+                    if(value>=achievement.target){
+                        achievement.unlocked=true;
+                        changed=true;
+                        console.log("実績解除: "+achievement.name);
+                    }
+                }
+                if(changed){
+                    createAchievements();
+                    save();
+                }
+            }
             createAchievements();
-            up()
         </script>
     </body>
 </html>
