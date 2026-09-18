@@ -39,22 +39,30 @@
         .achievement{
             display: inline-block;
             width: 150px;
-            height: 80px;
+            height: 90px;
             border: 2px solid black;
             margin: 5px;
-            padding: 10px;
+            padding: 8px;
             box-sizing: border-box;
             cursor: pointer;
             vertical-align: top;
+            text-align: center;
+            background: white;
         }
-
+        
         .achievement:hover{
             background: #eeeeee;
         }
-
+        
+        .achievement img{
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+        }
+        
         .achievementDetail{
             display: none;
-            margin: 10px 0;
+            margin-top: 20px;
             padding: 15px;
             border: 2px solid black;
         }
@@ -216,7 +224,7 @@
                 try{
                     if(!code.startsWith("CU1-")){
                         throw new Error("形式が違います");
-                    }
+                    };
 
                     let base64=code.substring(4);
                     let json=decodeURIComponent(escape(atob(base64)));
@@ -230,7 +238,7 @@
                         typeof data.outup!=="number"
                     ){
                         throw new Error("データが不正です");
-                    }
+                    };
 
                     score=data.score;
                     nedan=data.nedan;
@@ -243,7 +251,7 @@
                 }catch(error){
                     console.log(error);
                     return false;
-                }
+                };
             };
 
             setInterval(save,60000);
@@ -313,7 +321,7 @@
                 }catch(error){
                     console.log(error);
                 };
-            }
+            };
             up()
             //scoreアップ
             document.getElementById("btn").onclick=function(){
@@ -336,7 +344,7 @@
                     nedan[1]*=upp;
                     kounyu[1]+=1;
                     effect[1]+=1;
-                }
+                };
                 up();
             };
             document.getElementById("upgrade3").onclick=function(){
@@ -349,8 +357,8 @@
                     }else{
                         kounyu[2]+=1;
                         effect[2]+=0.005;
-                    }
-                }
+                    };
+                };
                 up();
             };
             document.getElementById("upgrade4").onclick=function(){
@@ -359,7 +367,7 @@
                     nedan[3]*=upp;
                     kounyu[3]+=1;
                     effect[3]+=1;
-                }
+                };
                 up();
             };
             document.getElementById("upgrade5").onclick=function(){
@@ -369,7 +377,7 @@
                     kounyu[4]+=1;
                     effect[4]+=1;
                     outup-=Math.floor(outup/effect[4]);
-                }
+                };
                 up();
             };
             document.getElementById("upgrade6").onclick=function(){
@@ -378,7 +386,7 @@
                     nedan[5]*=upp;
                     kounyu[5]+=1;
                     effect[5]+=1;
-                }
+                };
                 up();
             };
             document.getElementById("upgrade7").onclick=function(){
@@ -387,7 +395,7 @@
                     nedan[6]*=upp;
                     kounyu[6]+=1;
                     effect[6]+=0.01;
-                }
+                };
                 up();
             };
             //セーブ
@@ -407,7 +415,7 @@
                 if(code===""){
                     document.getElementById("codeMessage").innerText="先にcodesaveを押してください";
                     return;
-                }
+                };
 
                 navigator.clipboard.writeText(code);
                 document.getElementById("codeMessage").innerText="コピーしました";
@@ -421,15 +429,31 @@
                     document.getElementById("codeMessage").innerText="読み込みました";
                 }else{
                     document.getElementById("codeMessage").innerText="保存コードが正しくありません";
-                }
+                };
             };
             document.getElementById("reset").onclick=function(){
                 if(confirm("本当にゲームデータをリセットしますか？")){
                     localStorage.clear();
                     location.reload();
-                }
+                };
             };
             //実績
+            function createAchievements(){
+            let list = document.getElementById("achievementList");
+            list.innerHTML = "";
+            for(let i=0; i<achievements.length; i++){
+                let achievement = document.createElement("div");
+                achievement.className = "achievement";
+                achievement.innerHTML = `
+                    <div>No.${String(achievements[i].id).padStart(3,"0")}</div>
+                    <div>${achievements[i].unlocked ? achievements[i].name : "???"}</div>
+                    `;
+                    achievement.onclick = function(){
+                    showAchievement(achievements[i].id);
+                    };
+                    list.appendChild(achievement);
+                };
+            };
             let achievements = [
                 {
                     id: 1,
