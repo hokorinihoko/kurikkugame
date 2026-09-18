@@ -68,7 +68,7 @@
         }
 
         .achievementName {
-            font-size: 14px;
+            font-size: 12px;
         }
         </style>
     </head>
@@ -671,7 +671,6 @@
                     achievement.innerHTML = `
                         <div>No.${String(achievements[i].id).padStart(3,"0")}</div>
                         <div class="achievementName">${achievements[i].unlocked ? achievements[i].name : "???"}</div>
-                        <div>${achievements[i].unlocked ? achievements[i].name : "???"}</div>
                     `;
                     achievement.onclick = function(){
                     showAchievement(achievements[i].id);
