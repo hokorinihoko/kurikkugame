@@ -439,20 +439,39 @@
             };
             //実績
             function createAchievements(){
-            let list = document.getElementById("achievementList");
-            list.innerHTML = "";
-            for(let i=0; i<achievements.length; i++){
-                let achievement = document.createElement("div");
-                achievement.className = "achievement";
-                achievement.innerHTML = `
-                    <div>No.${String(achievements[i].id).padStart(3,"0")}</div>
-                    <div>${achievements[i].unlocked ? achievements[i].name : "???"}</div>
+                let list = document.getElementById("achievementList");
+                list.innerHTML = "";
+                for(let i=0; i<achievements.length; i++){
+                    let achievement = document.createElement("div");
+                    achievement.className = "achievement";
+                    achievement.innerHTML = `
+                        <div>No.${String(achievements[i].id).padStart(3,"0")}</div>
+                        <div>${achievements[i].unlocked ? achievements[i].name : "???"}</div>
                     `;
                     achievement.onclick = function(){
                     showAchievement(achievements[i].id);
                     };
                     list.appendChild(achievement);
                 };
+            };
+            function showAchievement(id){
+                let detail = document.getElementById("achievementDetail");
+                let achievement = achievements.find(a => a.id === id);
+                if(achievement === undefined){
+                    return;
+                };
+                if(achievement.unlocked){
+                    detail.innerHTML = `
+                        <h2>No.${String(achievement.id).padStart(3,"0")} ${achievement.name}</h2>
+                        <p>${achievement.condition}</p>
+                    `;
+                }else{
+                    detail.innerHTML = `
+                        <h2>???</h2>
+                        <p>???</p>
+                    `;
+                };
+                detail.style.display = "block";
             };
             let achievements = [
                 {
@@ -606,6 +625,7 @@
                     unlocked: false
                 },
             ];
+            createAchievements();
 
                 detail.style.display = "block";
         </script>
