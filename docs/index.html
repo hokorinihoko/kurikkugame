@@ -4,54 +4,161 @@
         <title>クリックアップ</title>
         <meta charset="UTF-8">
         <style>
-        button {
+        button{
             font-size: 20px;
             padding: 15px 30px;
             margin: 5px;
         }
-        outo {
+        #outo{
             font-size: 15px;
         }
+        #menuBtn{
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 25px;
+            padding: 5px 12px;
+            z-index: 1000;
+        }
+        #menu{
+            position: fixed;
+            top: 0;
+            right: -250px;
+            width: 220px;
+            height: 100%;
+            background: white;
+            border-right: 2px solid black;
+            padding: 15px;
+            box-sizing: border-box;
+            transition: right 0.2s;
+            z-index: 999;
+        }
+        #menu.open{
+            right: 0;
+        }
+        .achievement{
+            display: inline-block;
+            width: 150px;
+            height: 80px;
+            border: 2px solid black;
+            margin: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            cursor: pointer;
+            vertical-align: top;
+        }
 
+        .achievement:hover{
+            background: #eeeeee;
+        }
+
+        .achievementDetail{
+            display: none;
+            margin: 10px 0;
+            padding: 15px;
+            border: 2px solid black;
+        }
         </style>
     </head>
     <body>
-        <h1 id="text">0</h1>
-        <button id="btn">+1</button>
-        <h2>cp</h2>
-        <ul style="list-style: none;">
-            <li id="up">0</li>
-        </ul>
-        <h2>op</h2>
-        <ul style="list-style: none;">
-            <li id="auto">0</li>
-        </ul>
-        <h2>cup1:cp+1</h2>
-        <button id="upgrade1">0</button>
-        <h2>cup2:cup1の効果+1倍</h2>
-        <button id="upgrade2">0</button>
-        <h2>cup3:cpの指数+0.01</h2>
-        <button id="upgrade3">0</button>
-        <h2>oup1:自動ゲット+1</h2>
-        <button id="upgrade4">0</button>
-        <h2>oup2:自動ゲット間隔短縮</h2>
-        <button id="upgrade5">0</button>
-        <h2>oup3:oup1の効果+1倍</h2>
-        <button>
-            <span id="upgrade6">0</span>
+        <button id="menuBtn">☰</button>
+        <div id="menu">
+            <h2>メニュー</h2>
+
+            <button id="save">localsave</button>
+            <button id="game">game</button>
+            <button id="system">system</button>
+            <button id="achievement">achievement</button><br>
+            <h2>用語紹介</h2>
+            <ul>
+                <li>cp=クリック力</li>
+                <li>cup=クリックアップグレード</li>
+                <li>op=オート力</li>
+                <li>oup=オートアップグレード</li>
+            </ul>
+        </div>
+        <div id="gameScreen">
+            <h1 id="text">0</h1>
+            <button id="btn">+1</button>
+            <h2>cp</h2>
+            <ul style="list-style:none;">
+                <li id="up">0</li>
+            </ul>
+            <h2>op</h2>
+            <ul style="list-style:none;">
+                <li id="auto">0</li>
+            </ul>
+            <h2>cup1:cp+1</h2>
+            <button id="upgrade1">
+                <span id="kounyu1">0</span><br>
+                <span id="upgrade1price">0</span>
+            </button>
+            <h2>cup2:cup1の効果+1倍</h2>
+            <button id="upgrade2">
+                <span id="kounyu2">0</span><br>
+                <span id="upgrade2price">0</span>
+            </button>
+            <h2>cup3:cpの指数+0.01</h2>
+            <button id="upgrade3">
+                <span id="kounyu3">0</span><br>
+                <span id="upgrade3price">0</span>
+            </button>       
+                <h2>oup1:自動ゲット+1</h2>
+            <button id="upgrade4">
+                <span id="kounyu4">0</span><br>
+                <span id="upgrade4price">0</span>
+            </button>
+            <h2>oup2:自動ゲット間隔短縮</h2>
+            <button id="upgrade5">
+                <span id="kounyu5">0</span><br>
+                <span id="upgrade5price">0</span><br>
+                <span id="outo">0</span>
+            </button>
+            <h2>oup3:oup1の効果+1倍</h2>
+            <button id="upgrade6">
+                <span id="kounyu6">0</span><br>
+                <span id="upgrade6price">0</span>
+            </button>
+            <h2>oup4:opの指数+0.01</h2>
+            <button id="upgrade7">
+                <span id="kounyu7">0</span><br>
+                <span id="upgrade7price">0</span>
+            </button>
+        </div>
+        <div id="systemScreen" style="display:none;">
+            <h1>設定</h1>
+            <h2>保存コード</h2>
+            <button id="codesave">codesave</button><br>
+            <textarea id="saveCode" rows="4" cols="30" readonly></textarea>
             <br>
-            <outo id="outo">0</outo>
-        </button>
-        <h2>oup4:opの指数+0.01</h2>
-        <button id="upgrade7">0</button>
-        <br>
-        <h2>用語紹介</h2>
-        <ui>
-            <li>cp=クリック力</li>
-            <li>cup=クリックアップグレード</li>
-            <li>op=オート力</li>
-            <li>oup=オートアップグレード</li>
-        </ui>
+            <button id="copyCode">コピー</button>
+            <h2>読み込み</h2>
+            <textarea id="loadCode" rows="4" cols="30" placeholder="保存コードを入力"></textarea>
+            <br>
+            <button id="load">load</button>
+            <p id="codeMessage"></p>
+            <button id="reset">データをリセット</button>
+        </div>
+        <div id="achievementScreen" style="display:none;">
+            <h1>実績</h1>
+
+            <div class="achievement" onclick="showAchievement(1)">
+                No.001<br>
+                はじめの一歩
+            </div>
+
+            <div class="achievement" onclick="showAchievement(2)">
+                No.002<br>
+                100点
+            </div>
+
+            <div class="achievement" onclick="showAchievement(3)">
+                No.003<br>
+                大金持ち
+            </div>
+
+            <div id="achievementDetail" class="achievementDetail"></div>
+        </div>
         <script>
             //セットアップ
 
@@ -62,154 +169,294 @@
             ];
             //購入数
             let kounyu=[
-                1,1,1,1,1,1,1,1
+                0,0,0,0,0,0,0,0,0
             ];
-            //単位
-            //let unit=[
-            //    "","K","M","B","T","A"
-            //]
-
+            let effect=[
+                1,1,1,1,1,1,1,1,1
+            ];
             //スコアアップ
             let scoreup=0;
             let scoreupz=0;
-            //スコープ用
-            let scope=0;
             //オートの時間
             let outup=10000;
-            //指数表記用
-            let e=0;
             //upの成長率
             let upp=1.1;
 
             //関数作成
 
-            //scoreが増える
-            function scoreups () {
-                scoreup=kounyu[0]*kounyu[1]**kounyu[2];
+            //S&L
+            function load(){
+                let data=localStorage.getItem("score");
+                if(data!==null){
+                    score=Number(data);
+                    nedan=JSON.parse(localStorage.getItem("nedan"));
+                    kounyu=JSON.parse(localStorage.getItem("kounyu"));
+                    effect=JSON.parse(localStorage.getItem("effect"));
+                    outup=Number(localStorage.getItem("outup"));
+                };
+            };
+            load();
+            function save(){
+                localStorage.setItem("score",score);
+                localStorage.setItem("nedan",JSON.stringify(nedan));
+                localStorage.setItem("kounyu",JSON.stringify(kounyu));
+                localStorage.setItem("effect",JSON.stringify(effect));
+                localStorage.setItem("outup",outup);
             };
 
-            //オート時間
-            function startAuto() {
-                setInterval(() => {
-                    scoreupz=kounyu[3]*kounyu[5];
-                    es((score+=scoreupz));
+            // 保存コード作成
+            function makeSaveCode(){
+                let data={
+                    score:score,
+                    nedan:nedan,
+                    kounyu:kounyu,
+                    effect:effect,
+                    outup:outup
+                };
+
+                // JSON → Base64
+                let json=JSON.stringify(data);
+                let code=btoa(unescape(encodeURIComponent(json)));
+
+                return "CU1-"+code;
+            };
+
+            // 保存コード読み込み
+            function loadCode(code){
+                try{
+                    if(!code.startsWith("CU1-")){
+                        throw new Error("形式が違います");
+                    }
+
+                    let base64=code.substring(4);
+                    let json=decodeURIComponent(escape(atob(base64)));
+                    let data=JSON.parse(json);
+
+                    if(
+                        typeof data.score!=="number" ||
+                        !Array.isArray(data.nedan) ||
+                        !Array.isArray(data.kounyu) ||
+                        !Array.isArray(data.effect) ||
+                        typeof data.outup!=="number"
+                    ){
+                        throw new Error("データが不正です");
+                    }
+
+                    score=data.score;
+                    nedan=data.nedan;
+                    kounyu=data.kounyu;
+                    effect=data.effect;
+                    outup=data.outup;
+
                     up();
-                }, outup);
-            };
-            startAuto();
-
-            // 指数表記へ変更
-            function es(ea) {
-                let s = ea.toString();
-                let len = s.length;
-                if (len > 6&&score<9.99e20) {
-                    return s.substring(0, 1) + "." + s.substring(1, 3) + "e" + (len - 1);
-                } else {
-                    return ea;
+                    return true;
+                }catch(error){
+                    console.log(error);
+                    return false;
                 }
             };
-            //function units(unitz){
-            //    for(let i=0;i<unit.length;i++){
-            //        if (score>=1000**i){
-            //            return unit[i]
-            //        }
-            //    }
-            //}
 
-            //小数点排除
-            function cut(x) {
-                return Math.floor(x * 100) / 100;
+            setInterval(save,60000);
+            //メニュー
+            document.getElementById("menuBtn").onclick=function(){
+                document.getElementById("menu").classList.toggle("open");
+            };
+            document.getElementById("game").onclick=function(){
+                document.getElementById("gameScreen").style.display="block";
+                document.getElementById("systemScreen").style.display="none";
+                document.getElementById("achievementScreen").style.display="none";
             };
 
-            //html変更
-            function up () {
-                scoreups();
-                scope=kounyu[0]+"*"+kounyu[1]+"^"+cut(kounyu[2]);
-                es(scope);
-                document.getElementById("up").innerText =scope
-                document.getElementById("auto").innerText =kounyu[3]+"/"+outup+"ms";
-                es(score);
-                document.getElementById("btn").innerText = "+"+cut(scoreup)+"score";
-                scope=0
-                document.getElementById("text").innerText = cut(es(score))+"score";
-                document.getElementById("outo").innerText = "残り"+(101-kounyu[4])+"回購入可能";
-              
-                //動き
+            document.getElementById("system").onclick=function(){
+                document.getElementById("gameScreen").style.display="none";
+                document.getElementById("systemScreen").style.display="block";
+                document.getElementById("achievementScreen").style.display="none";
+            };
 
+            document.getElementById("achievement").onclick=function(){
+                document.getElementById("gameScreen").style.display="none";
+                document.getElementById("systemScreen").style.display="none";
+                document.getElementById("achievementScreen").style.display="block";
+            };
+            //scoreが増える
+            function scoreups(){
+                scoreup=(effect[0]*effect[1])**effect[2];
+            };
+            //オート時間
+            function startAuto(){
+                setTimeout(()=>{
+                    scoreupz=(effect[3]*effect[5])**effect[6];
+                    score+=scoreupz;
+                    up();
+                    startAuto();
+                },outup);
+            };
+            startAuto();
+            //指数表記へ
+            function e(x){
+                if (x>=1e5){
+                    return x.toExponential(2);
+                }else{
+                    return cut(x);
+                };
+            };
+            //小数点排除
+            function cut(xx){
+                return Math.floor(xx*100)/100;
+            };
+            //html変更
+            function up(){
+                scoreups();
+                document.getElementById("up").innerText="("+e(effect[0])+"*"+e(effect[1])+")^"+e(effect[2]);
+                document.getElementById("auto").innerText="("+e(effect[3])+"*"+e(effect[5])+")^"+e(effect[6])+"/"+outup+"ms";
+                document.getElementById("btn").innerText="+"+e(scoreup)+"score";
+                document.getElementById("text").innerText=e(score)+"score";
+                document.getElementById("outo").innerText="残り"+(100-kounyu[4])+"回購入可能";
                 //効果表示用
-                try {
-                    for(let i=0;i<kounyu.length;i++){
-                        document.getElementById("upgrade"+(i+1)).innerText=
-                        cut(nedan[i])+"score";
+                try{
+                    for(let i=0;i<7;i++){
+                        document.getElementById("upgrade"+(i+1)+"price").innerText=
+                        e(nedan[i])+"score";
+                        document.getElementById("kounyu"+(i+1)).innerText=
+                        kounyu[i];
                     }
-                } catch  {}
+                }catch(error){
+                    console.log(error);
+                };
             }
             up()
-
             //scoreアップ
-            document.getElementById("btn").onclick = function () {
+            document.getElementById("btn").onclick=function(){
                 score+=scoreup;
                 up();
             };
-
             //アップグレード
-            document.getElementById("upgrade1").onclick = function () {
+            document.getElementById("upgrade1").onclick=function(){
                 if (score>=nedan[0]){
                     score-=nedan[0];
                     nedan[0]*=upp;
                     kounyu[0]+=1;
+                    effect[0]+=1;
                 };
                 up();
             };
-            document.getElementById("upgrade2").onclick = function () {
+            document.getElementById("upgrade2").onclick=function(){
                 if (score>=nedan[1]){
                     score-=nedan[1];
                     nedan[1]*=upp;
                     kounyu[1]+=1;
+                    effect[1]+=1;
                 }
                 up();
             };
-            document.getElementById("upgrade3").onclick = function () {
+            document.getElementById("upgrade3").onclick=function(){
                 if (score>=nedan[2]){
                     score-=nedan[2];
                     nedan[2]*=upp;
-                    kounyu[2]+=0.01;
+                    if(kounyu[2]<100){
+                        kounyu[2]+=1;
+                        effect[2]+=0.01;
+                    }else{
+                        kounyu[2]+=1;
+                        effect[2]+=0.005;
+                    }
                 }
                 up();
             };
-            document.getElementById("upgrade4").onclick = function () {
+            document.getElementById("upgrade4").onclick=function(){
                 if (score>=nedan[3]){
                     score-=nedan[3];
                     nedan[3]*=upp;
                     kounyu[3]+=1;
+                    effect[3]+=1;
                 }
                 up();
             };
-            document.getElementById("upgrade5").onclick = function () {
-                if (score>=nedan[4]&&kounyu[4]<101){
+            document.getElementById("upgrade5").onclick=function(){
+                if (score>=nedan[4]&&kounyu[4]<100){
                     score-=nedan[4];
                     nedan[4]*=upp;
                     kounyu[4]+=1;
-                    outup-=outup/kounyu[4]
+                    effect[4]+=1;
+                    outup-=Math.floor(outup/effect[4]);
                 }
                 up();
             };
-            document.getElementById("upgrade6").onclick = function () {
+            document.getElementById("upgrade6").onclick=function(){
                 if (score>=nedan[5]){
                     score-=nedan[5];
                     nedan[5]*=upp;
                     kounyu[5]+=1;
+                    effect[5]+=1;
                 }
                 up();
             };
-            document.getElementById("upgrade7").onclick = function () {
+            document.getElementById("upgrade7").onclick=function(){
                 if (score>=nedan[6]){
                     score-=nedan[6];
                     nedan[6]*=upp;
-                    kounyu[6]+=0.01;
+                    kounyu[6]+=1;
+                    effect[6]+=0.01;
                 }
                 up();
             };
+            //セーブ
+            document.getElementById("save").onclick=function(){
+                save();
+            };
+            //保存コード書き出し＆読み込み
+            document.getElementById("codesave").onclick=function(){
+                let code=makeSaveCode();
+                document.getElementById("saveCode").value=code;
+                document.getElementById("codeMessage").innerText="保存コードを作成しました";
+            };
+
+            document.getElementById("copyCode").onclick=function(){
+                let code=document.getElementById("saveCode").value;
+
+                if(code===""){
+                    document.getElementById("codeMessage").innerText="先にcodesaveを押してください";
+                    return;
+                }
+
+                navigator.clipboard.writeText(code);
+                document.getElementById("codeMessage").innerText="コピーしました";
+            };
+
+            document.getElementById("load").onclick=function(){
+                let code=document.getElementById("loadCode").value.trim();
+
+                if(loadCode(code)){
+                    save();
+                    document.getElementById("codeMessage").innerText="読み込みました";
+                }else{
+                    document.getElementById("codeMessage").innerText="保存コードが正しくありません";
+                }
+            };
+            document.getElementById("reset").onclick=function(){
+                if(confirm("本当にゲームデータをリセットしますか？")){
+                    localStorage.clear();
+                    location.reload();
+                }
+            };
+            //実績
+            function showAchievement(number){
+                let detail = document.getElementById("achievementDetail");
+
+                if(number === 1){
+                    detail.innerText = "初めてクリックする";
+                }
+
+                if(number === 2){
+                    detail.innerText = "scoreを100以上にする";
+                }
+
+                if(number === 3){
+                    detail.innerText = "scoreを1,000,000以上にする";
+                }
+
+                detail.style.display = "block";
+            }
         </script>
     </body>
 </html>
