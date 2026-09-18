@@ -1,5 +1,5 @@
-# クリックゲーム
-ただのクリッカーです。
+# クリックゲーム<br>
+ただのクリッカーです。<br>
 https://hokorinihoko.github.io/kurikkugame/
-バグ
-・cpapの小数点1がついている物を買おうとするとscoreがNaNになり進行不可能に
+#バグ<br>
+・特になし
